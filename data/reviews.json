@@ -4,7 +4,7 @@
     "title": "审阅流程连通测试",
     "kind": "系统测试",
     "public": true,
-    "deploymentStatus": "source",
+    "deploymentStatus": "已验证",
     "reviewStatus": "待审阅",
     "skillStatus": "未生成"
   }
