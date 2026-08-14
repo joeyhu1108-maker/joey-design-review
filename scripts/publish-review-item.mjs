@@ -18,6 +18,8 @@ if (!args.public && !args.dryRun) fail("公开 GitHub 前必须显式传入 --pu
 const allowed = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".pdf", ".mp4"]);
 const ext = path.extname(source).toLowerCase();
 if (!allowed.has(ext)) fail(`暂不支持 ${ext || "无扩展名"}；支持 PNG/JPG/WebP/GIF/SVG/PDF/MP4`);
+const allowedKinds = new Set(["设计图", "网页/H5", "Logo", "海报", "动效", "系统测试", "其他"]);
+if (!allowedKinds.has(args.kind)) fail(`作品类型必须是: ${[...allowedKinds].join("、")}`);
 
 const slug = args.slug || slugify(args.title);
 if (!slug) fail("无法从标题生成 slug，请传入 --slug");
@@ -37,6 +39,8 @@ if (args.dryRun) {
   console.log(JSON.stringify({ dryRun: true, source, assetRelative, pageRelative, previewUrl }, null, 2));
   process.exit(0);
 }
+
+if (hasStagedChanges()) fail("Git 中已有暂存改动；请先处理后再发布，防止夹带无关文件");
 
 const config = readEnv(path.join(repoRoot, ".local", "review.env"));
 for (const key of ["FEISHU_BASE_TOKEN", "FEISHU_TABLE_ID", "FEISHU_ATTACHMENT_FIELD_ID"]) {
@@ -132,6 +136,16 @@ function run(command, commandArgs, options = {}) {
 function runJson(command, commandArgs) {
   const output = run(command, commandArgs);
   try { return JSON.parse(output); } catch { fail(`${command} 没有返回有效 JSON`); }
+}
+
+function hasStagedChanges() {
+  try {
+    execFileSync("git", ["diff", "--cached", "--quiet"], { cwd: repoRoot, stdio: "ignore" });
+    return false;
+  } catch (error) {
+    if (error.status === 1) return true;
+    fail("无法检查 Git 暂存区");
+  }
 }
 
 function waitForPages(repo, commit) {
