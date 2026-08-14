@@ -11,6 +11,7 @@ For every returned record it must:
 5. Run `node scripts/validate-skill.mjs skills/<name>`.
 6. Commit and push only that Skill folder.
 7. Update Feishu with `Skill 状态`, `Skill 名称`, the commit-pinned GitHub link, and validation result.
+8. Send a Feishu bot DM for Skill success or failure; do not message when there is no new approved record.
 
 The display title should use the `ZONE-` prefix. The technical folder and frontmatter `name` remain lowercase kebab-case.
 

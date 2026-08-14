@@ -96,7 +96,8 @@ run("lark-cli", [
   "--format", "json"
 ], { cwd: repoRoot });
 
-console.log(JSON.stringify({ ok: true, title: args.title, previewUrl, sourceUrl, commit, recordId }, null, 2));
+const reportMessageSent = sendReviewReport({ config, title: args.title, previewUrl, recordId });
+console.log(JSON.stringify({ ok: true, title: args.title, previewUrl, sourceUrl, commit, recordId, reportMessageSent }, null, 2));
 
 function parseArgs(values) {
   const result = {};
@@ -145,6 +146,29 @@ function hasStagedChanges() {
   } catch (error) {
     if (error.status === 1) return true;
     fail("无法检查 Git 暂存区");
+  }
+}
+
+function sendReviewReport({ config, title, previewUrl, recordId }) {
+  if (!config.FEISHU_REPORT_USER_ID || config.FEISHU_REPORT_IDENTITY !== "bot") {
+    console.warn("未配置机器人汇报，已跳过飞书私聊");
+    return false;
+  }
+  const baseUrl = `https://my.feishu.cn/base/${config.FEISHU_BASE_TOKEN}`;
+  const markdown = `## 新设计待你审阅\n\n- 作品：${title}\n- 部署状态：已验证\n- 审阅状态：待审阅\n\n[打开 GitHub 审阅页](${previewUrl})\n\n[进入飞书审阅表](${baseUrl})`;
+  try {
+    execFileSync("lark-cli", [
+      "im", "+messages-send",
+      "--user-id", config.FEISHU_REPORT_USER_ID,
+      "--as", "bot",
+      "--idempotency-key", `review-${recordId}`,
+      "--markdown", markdown,
+      "--format", "json"
+    ], { cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] });
+    return true;
+  } catch {
+    console.warn("作品已发布且飞书记录已创建，但机器人私聊发送失败");
+    return false;
   }
 }
 
