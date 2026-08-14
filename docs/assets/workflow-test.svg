@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">飞书与 GitHub 审阅流程连通测试</title>
+  <desc id="desc">从 Codex 提交作品，经 GitHub Pages 部署，在飞书拍板后沉淀为 Skill。</desc>
+  <rect width="1600" height="1000" fill="#ece9df"/>
+  <circle cx="1300" cy="186" r="220" fill="#ff5e3a"/>
+  <circle cx="242" cy="822" r="310" fill="#5d63ff"/>
+  <rect x="152" y="144" width="1296" height="712" rx="36" fill="#fff" stroke="#171714" stroke-width="3"/>
+  <text x="230" y="266" fill="#171714" font-family="Arial, sans-serif" font-size="34" letter-spacing="4">JOEY / DESIGN REVIEW</text>
+  <text x="230" y="420" fill="#171714" font-family="Arial, sans-serif" font-size="88" font-weight="700">Codex → GitHub</text>
+  <text x="230" y="528" fill="#171714" font-family="Arial, sans-serif" font-size="88" font-weight="700">→ Feishu → Skill</text>
+  <line x1="230" y1="618" x2="1370" y2="618" stroke="#171714" stroke-width="3"/>
+  <text x="230" y="704" fill="#171714" font-family="Arial, sans-serif" font-size="28">DEPLOYED · VERIFIED · AWAITING REVIEW</text>
+  <text x="230" y="766" fill="#77746c" font-family="Arial, sans-serif" font-size="24">Safe system test — no private design assets</text>
+</svg>
+
